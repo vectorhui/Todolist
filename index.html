@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>todolist</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="../vue/vue.js"></script>
+</head>
+<body>
+    <div class="page-top">
+        <div class="page-content">
+            <h2>任务计划列表</h2>
+        </div>
+    </div>
+    <div class="main">
+        <h3 class="big-title">添加任务：</h3>
+        <input 
+            placeholder="例如：学英语   提示：按回车即可添加任务" 
+            class="task-input" 
+            type="text"
+            @keyup.enter="addItem"
+            v-model="addTitle"
+        />
+        <ul class="task-count" v-show="list.length">
+            <li>{{todolist_length}}个任务未完成</li>
+            <li class="action">
+                <a :class="{active:visibility ==='all'}" href="#all">所有任务</a>
+                <a :class="{active:visibility ==='todo'}" href="#todo">未完成的任务</a>
+                <a :class="{active:visibility ==='done'}" href="#done">完成的任务</a>
+            </li>
+        </ul>
+        <h3 class="big-title">任务列表：</h3>
+        <div class="tasks">
+
+            <span class="no-task-tip" v-show="!list.length">还没有添加任何任务</span>
+            <ul class="todo-list">
+                <li class="todo" v-for="item in filterList" :class="{completed:item.isChecked,editing:item===editTodo}">
+                    <div class="view">
+                        <input class="toggle" type="checkbox" v-model="item.isChecked">
+                        <label @dblclick="clickHandle(item)">{{item.title}}</label>
+                        <button class="destroy" @click="deleteList(item)"></button>
+                    </div>
+                    <input 
+                        class="edit" 
+                        type="text" 
+                        v-model="item.title"
+                        v-focus="item===editTodo"
+                        @keyup.enter="editDone"
+                        @keyup.esc="editCancel(item)"
+                        @blur="editCancel(item)"
+                    />
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
